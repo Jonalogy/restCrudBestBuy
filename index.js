@@ -54,6 +54,9 @@ app.get("/products", function(req, res) {
 });
 
 app.get("/products/:id", function(req, res) {
+  /*Note that req.params is an object of route parameters,
+    in this case the route parameter is denoted by /:id.
+    req.params = {id:xxxxxx} */
   var product = getProduct(req.params.id);
   res.render('product_detail', {product: product});
 });
@@ -62,10 +65,13 @@ app.get("/products/:id", function(req, res) {
 app.get("/products/:id/edit", function(req, res) {
   var product = getProduct(req.params.id);
   res.render('product_edit', {product: product});
+    // console.log({product: product});
+    // //To visualise this better, see this link: https://repl.it/DXnK/3
 });
 
 // UPDATE (this route accept info from the HTML form)
 app.put("/products/:id", function(req, res) {
+
   var product = getProduct(req.params.id);
   product.id = req.params.id;
   product.name = req.body.name;
@@ -94,15 +100,20 @@ function getProducts() {
 }
 
 function getProduct(id) {
-  var products = getProducts();
+  //The following line obtains converted readable jSon file
+  //Products will be an array of objects
+  var products = getProducts(); //console.log(products);
 
   var product = undefined;
+
+  //following for loop matches id submitted my GET request and assigns the
+  //relavent object to product.
   for (var i = 0; i < products.length; i++) {
     if (products[i].id === id) {
       product = products[i];
     }
   }
-  return product;
+  return product; //Product is now an object type
 }
 
 function editProduct(newProductInfo) {
